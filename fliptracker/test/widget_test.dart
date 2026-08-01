@@ -13,8 +13,8 @@ void main() {
   testWidgets('Property overview screen renders', (WidgetTester tester) async {
     await tester.pumpWidget(const FlipTrackerApp());
 
-    expect(find.text('Walter'), findsOneWidget);
-    expect(find.text('North Loop Flip'), findsOneWidget);
-    expect(find.text('Next steps'), findsOneWidget);
+    expect(find.text('Pagina de Walter'), findsOneWidget);
+    expect(find.text('Mejores Propiedades☆'), findsOneWidget);
+    expect(find.text('Ver detalles'), findsWidgets);
   });
 }

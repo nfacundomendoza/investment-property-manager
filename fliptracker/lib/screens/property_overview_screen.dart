@@ -1,212 +1,447 @@
 import 'package:flutter/material.dart';
-import '../widgets/metric_card.dart';
-import '../widgets/chip.dart';
-import '../widgets/task_tile.dart';
+
 import '../app/theme.dart';
+import '../data/mock_properties.dart';
+import '../widgets/app_navbar.dart';
+import '../widgets/app_footer.dart';
+import '../widgets/filter_bar.dart';
+import '../widgets/kpi_card.dart';
+import '../widgets/table_cells.dart';
+import '../models/property_record.dart';
+import 'best_properties.dart';
 
 class PropertyOverviewScreen extends StatelessWidget {
   const PropertyOverviewScreen({super.key});
 
+  void _handleNavigation(BuildContext context, int index) {
+    if (index == 0) {
+      return;
+    }
+
+    if (index == 1) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const BestPropertiesScreen()),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Exportación disponible próximamente')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<PropertyRecord> properties = propertiesMock;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 22,
-                    backgroundColor: AppColors.primaryLight,
-                    child: Icon(Icons.home_work_rounded, color: AppColors.primary),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Walter',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        Text(
-                          'Investment property dashboard',
-                          style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryLight,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: const Text(
-                      'On track',
-                      style: TextStyle(
-                        color: AppColors.success,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF1D4ED8), Color(0xFF4F46E5)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+      backgroundColor: AppColors.surface,
+      body: Column(
+        children: [
+          AppNavbar(
+            selectedIndex: 0,
+            onNavigate: (index) => _handleNavigation(context, index),
+          ),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(56, 24, 56, 28),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Expanded(
-                          child: Column(
+                        const Text(
+                          'PORTAFOLIO',
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(Icons.chevron_right, size: 16, color: AppColors.textSecondary),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'BUENOS AIRES',
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final isWide = constraints.maxWidth > 860;
+
+                        if (isWide) {
+                          return Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'North Loop Flip',
-                                style: TextStyle(
-                                  color: AppColors.background,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Análisis de Oportunidades Inmobiliarias',
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.1,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 8),
+
+                                    Text(
+                                      'Valuación, estimación de reformas y proyecciones de rentabilidad para adquisiciones residenciales.',
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: AppColors.textSecondary,
+                                        fontSize: 16,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(height: 6),
-                              Text(
-                                '3 bed • 2 bath • 1,840 sq ft',
-                                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+
+                              const SizedBox(width: 24),
+
+                              Column(
+                                children: [
+                                  KpiCard(
+                                    label: 'Total Analizadas',
+                                    value: '8 Propiedades',
+                                  ),
+
+                                  const SizedBox(height: 10),
+
+                                  KpiCard(
+                                    label: 'Rentabilidad Promedio',
+                                    value: '19.7%',
+                                    valueColor: AppColors.success,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        }
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Análisis de Oportunidades Inmobiliarias',
+                              softWrap: true,
+                              style: TextStyle(
+                                color: AppColors.textPrimary,
+                                fontSize: 40,
+                                fontWeight: FontWeight.w700,
+                                height: 1.1,
+                              ),
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            Text(
+                              'Valuación, estimación de reformas y proyecciones de rentabilidad para adquisiciones residenciales.',
+                              softWrap: true,
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 16,
+                                height: 1.5,
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            KpiCard(
+                              label: 'Total Analizadas',
+                              value: '8 Propiedades',
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            KpiCard(
+                              label: 'Rentabilidad Promedio',
+                              value: '19.7%',
+                              valueColor: AppColors.success,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    FilterBar(),
+
+                    const SizedBox(height: 16),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.add,
+                          size: 18,
+                        ),
+                        label: const Text(
+                          'Añadir Propiedad',
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success,
+                          foregroundColor: AppColors.background,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppColors.border,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.textPrimary.withValues(alpha: 0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(minWidth: 1120),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                color: AppColors.primary,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 14,
+                                ),
+                                child: const Row(
+                                  children: [
+                                    HeaderCell(
+                                      label: 'Cód Viv.',
+                                      width: 90,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Dirección',
+                                      width: 230,
+                                    ),
+                                    HeaderCell(
+                                      label: 'm²',
+                                      width: 70,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Tipo',
+                                      width: 100,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Compra',
+                                      width: 130,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Est. Reforma',
+                                      width: 140,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Est. Venta',
+                                      width: 130,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Ganancia Est.',
+                                      width: 140,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Rentabilidad',
+                                      width: 110,
+                                    ),
+                                    HeaderCell(
+                                      label: 'Puntaje Oportunidad',
+                                      width: 172,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              ...List.generate(
+                                properties.length,
+                                (index) {
+                                  final property = properties[index];
+
+                                  return Container(
+                                    color: index.isEven
+                                        ? AppColors.background
+                                        : AppColors.surface,
+
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 16,
+                                    ),
+
+                                    child: Row(
+                                      children: [
+                                        PropertyDataCell(
+                                          label: property.code,
+                                          width: 90,
+                                          textColor: AppColors.textSecondary,
+                                        ),
+
+                                        PropertyDataCell(
+                                          label: property.address,
+                                          width: 230,
+                                          isStrong: true,
+                                        ),
+
+                                        PropertyDataCell(
+                                          label: property.area.toString(),
+                                          width: 70,
+                                          textColor: AppColors.textSecondary,
+                                        ),
+
+                                        PropertyDataCell(
+                                          width: 100,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.surface,
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              property.type,
+                                              style: const TextStyle(
+                                                color: AppColors.textPrimary,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        PropertyDataCell(
+                                          label: property.purchasePrice.toString(),
+                                          width: 130,
+                                          isStrong: true,
+                                        ),
+
+                                        PropertyDataCell(
+                                          label: property.reformCost.toString(),
+                                          width: 140,
+                                          textColor: AppColors.textSecondary,
+                                        ),
+
+                                        PropertyDataCell(
+                                          label: property.salePrice.toString(),
+                                          width: 130,
+                                          isStrong: true,
+                                        ),
+
+                                        PropertyDataCell(
+                                          label: property.estimatedGain.toString(),
+                                          width: 140,
+                                          textColor: AppColors.success,
+                                          isStrong: true,
+                                        ),
+
+                                        PropertyDataCell(
+                                          label:
+                                              '${property.yieldPercentage}%',
+                                          width: 110,
+                                          isStrong: true,
+                                        ),
+
+                                        PropertyDataCell(
+                                          width: 172,
+                                          child: Container(
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: property.scoreColor
+                                                  .withValues(alpha: 0.15),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+
+                                            child: Row(
+                                              mainAxisSize:
+                                                  MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  property.score.toString(),
+                                                  style: TextStyle(
+                                                    color:
+                                                        property.scoreColor,
+                                                    fontSize: 13,
+                                                    fontWeight:
+                                                        FontWeight.w700,
+                                                  ),
+                                                ),
+
+                                                const SizedBox(width: 4),
+
+                                                Text(
+                                                  '/ ${property.scoreLabel}',
+                                                  style: TextStyle(
+                                                    color:
+                                                        property.scoreColor,
+                                                    fontSize: 11,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: AppColors.background.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          child: const Text(
-                            'ROI 34%',
-                            style: TextStyle(
-                              color: AppColors.background,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MetricCard(
-                            label: 'Target sale',
-                            value: '\$298k',
-                            accent: const Color(0xFFBFDBFE),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: MetricCard(
-                            label: 'Profit',
-                            value: '\$62k',
-                            accent: const Color(0xFFD1FAE5),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 22),
-              const Text(
-                'Focus areas',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: const [
-                  AppChip(label: 'Inspection complete'),
-                  AppChip(label: 'Contract review'),
-                  AppChip(label: 'Interior refresh'),
-                  AppChip(label: 'Marketing ready'),
-                ],
-              ),
-              const SizedBox(height: 22),
-              const Text(
-                'Next steps',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.textPrimary.withValues(alpha: 0.04),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: const [
-                    TaskTile(
-                      icon: Icons.check_circle_outline,
-                      title: 'Finalize contractor scope',
-                      subtitle: 'Confirm paint and flooring quotes',
-                      color: AppColors.primary,
-                    ),
-                    Divider(height: 24),
-                    TaskTile(
-                      icon: Icons.calendar_today_outlined,
-                      title: 'Schedule staging walkthrough',
-                      subtitle: 'Friday • 2:00 PM',
-                      color: AppColors.success,
-                    ),
-                    Divider(height: 24),
-                    TaskTile(
-                      icon: Icons.bar_chart_outlined,
-                      title: 'Review estimated margins',
-                      subtitle: 'Update target sale assumptions',
-                      color: AppColors.warning,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 1,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.grid_view_rounded), label: 'Overview'),
-          NavigationDestination(icon: Icon(Icons.home_rounded), label: 'Property'),
-          NavigationDestination(icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
+
+          const AppFooter(),
         ],
       ),
     );

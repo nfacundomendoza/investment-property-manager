@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
 import '../app/theme.dart';
 
-class MetricCard extends StatelessWidget {
-  const MetricCard({
+class KpiCard extends StatelessWidget {
+  const KpiCard({
     super.key,
     required this.label,
     required this.value,
-    required this.accent,
+    this.valueColor,
   });
 
   final String label;
   final String value;
-  final Color accent;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 220,
       padding: const EdgeInsets.symmetric(
-        vertical: 14,
-        horizontal: 12,
+        horizontal: 16,
+        vertical: 12,
       ),
       decoration: BoxDecoration(
-        color: AppColors.background.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppColors.border,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.textPrimary.withValues(alpha: 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,15 +42,16 @@ class MetricCard extends StatelessWidget {
             label,
             style: const TextStyle(
               color: AppColors.textSecondary,
-              fontSize: 12,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             value,
             style: TextStyle(
-              color: accent,
-              fontSize: 20,
+              color: valueColor ?? AppColors.textPrimary,
+              fontSize: 18,
               fontWeight: FontWeight.w700,
             ),
           ),
