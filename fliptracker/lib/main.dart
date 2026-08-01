@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         seedColor: Colors.deepPurple,
       ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flip Tracker'),
     );
   }
 }
