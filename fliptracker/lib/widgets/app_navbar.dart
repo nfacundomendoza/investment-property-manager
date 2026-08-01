@@ -33,7 +33,7 @@ class AppNavbar extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           const Text(
-            'Pagina de Walter',
+            'FlipTracker',
             style: TextStyle(
               color: AppColors.background,
               fontSize: 18,
