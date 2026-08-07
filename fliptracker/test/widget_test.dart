@@ -10,11 +10,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fliptracker/app/flip_tracker_app.dart';
 
 void main() {
-  testWidgets('Property overview screen renders', (WidgetTester tester) async {
+  testWidgets('Property overview page renders', (WidgetTester tester) async {
     await tester.pumpWidget(const FlipTrackerApp());
 
-    expect(find.text('Pagina de Walter'), findsOneWidget);
-    expect(find.text('Mejores Propiedades☆'), findsOneWidget);
-    expect(find.text('Ver detalles'), findsWidgets);
+    expect(find.text('Análisis de Oportunidades Inmobiliarias'), findsOneWidget);
+    expect(find.text('Añadir Propiedad'), findsOneWidget);
+    expect(find.text('PORTAFOLIO'), findsOneWidget);
   });
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/best_properties.dart';
+import '../screens/main_screen.dart';
 import 'theme.dart';
 
 class FlipTrackerApp extends StatelessWidget {
@@ -17,7 +17,7 @@ class FlipTrackerApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.background,
         useMaterial3: true,
       ),
-      home: const BestPropertiesScreen(),
+      home: MainScreen(),
     );
   }
 }
